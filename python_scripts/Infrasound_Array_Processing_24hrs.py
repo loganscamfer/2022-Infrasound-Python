@@ -47,52 +47,6 @@ station_code = 'PARK'
 location_code = '??'
 channel_code = 'HDF'
 
-#%% Morning Data (1-4AM MT)
- # I added the try, except: statement to allow the loop to continue running when the array_processing function stopped due to end in a day's stream
-interval_days = 1
-start_time_morning = UTCDateTime("2020-04-15T07:00:00")
-start_time_0 = UTCDateTime("2020-04-15T07:00:00")
-start_times = [start_time_0 + i * interval_days * 86400 for i in range(39)]
-
-for start_time_morning in start_times:
-    try:
-        end_time = start_time_morning + 10800
-        st = client.get_waveforms("XP","PARK","??","HDF",start_time_morning,end_time)
-        add_inv_coords(st, inv)
-    
-        Array_1 = array_processing(st,10,0.5,sll_x = -4, slm_x = 4, sll_y = -4, slm_y = 4, 
-                 sl_s = 0.1, semb_thres = 0, vel_thres = 0, frqlow= 5,
-                 frqhigh=20, stime = start_time_morning, etime = end_time,
-                 prewhiten = False, verbose = True, coordsys = 'lonlat',
-                 timestamp = 'mlabday', method = 0, store = None)
-    
-        filename = start_time_morning.strftime('%Y%m%d_%H%M') + '.pkl'
-        pickle.dump(Array_1,open('pickle_files/'+filename,'wb'))
-    except:
-        pass
-#%% Evening Data (4-7PM MT)
-
-interval_days = 1
-start_time_evening = UTCDateTime("2020-04-15T22:00:00")
-start_time_0 = UTCDateTime("2020-04-15T22:00:00")
-start_times = [start_time_0 + i * interval_days * 86400 for i in range(39)]
-
-for start_time_evening in start_times:
-    try:
-        end_time = start_time_evening + 10800
-        st = client.get_waveforms("XP","PARK","??","HDF",start_time_evening,end_time)
-        add_inv_coords(st, inv)
-    
-        Array_1 = array_processing(st,10,0.5,sll_x = -4, slm_x = 4, sll_y = -4, slm_y = 4, 
-                 sl_s = 0.1, semb_thres = 0, vel_thres = 0, frqlow= 5,
-                 frqhigh=20, stime = start_time_evening, etime = end_time,
-                 prewhiten = False, verbose = True, coordsys = 'lonlat',
-                 timestamp = 'mlabday', method = 0, store = None)
-        
-        filename = start_time_evening.strftime('%Y%m%d_%H%M') + '.pkl'
-        pickle.dump(Array_1,open('pickle_files/'+filename,'wb'))
-    except:
-        pass
 #%% All Day Data (12:00AM-12:00AM)
  # I added the try, except: statement to allow the loop to continue running when the array_processing function stopped due to end in a day's stream
 interval_days = 1
