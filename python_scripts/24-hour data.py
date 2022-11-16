@@ -80,5 +80,25 @@ for z in range(39):
 date_array = [1,6,8,11,13,15,17,20,21,25,26,35,36,37]
 finalSWE_array_list = []
 for d in date_array:
-    finalSWE_array_list.append(temp_array_list[d])
+    finalSWE_array_list.append(swe_array_list[d])
+#%% Imports and processes Wind Data @ Stanley Ranger Station
+wind_csv = pd.read_csv('imported_data/'+'KSNT.csv')
+stanley_RS_wind = np.array(wind_csv)
+
+# Creates an empy list and fills it with each day
+split_arrays = []
+split_arrays = np.array_split(stanley_RS_wind,39,axis=0)
+# Converts split_arrays from 1 hour time periods to 5 sec time periods 
+# (Each 5 second interval for one hour following the observation hour is filled with the same SWE)
+wind_array_list = []
+for arrays in split_arrays:
+    wind_array_list.append(np.array([np.repeat(arrays[:,x],720,axis=0) for x in range(4)]))
+for z in range(39):
+    a = wind_array_list[z]
+    a = np.delete(a,0,axis=1)
+    wind_array_list[z] = a
+date_array = [1,6,8,11,13,15,17,20,21,25,26,35,36,37]
+finalwind_array_list = []
+for d in date_array:
+    finalwind_array_list.append(wind_array_list[d])
 
