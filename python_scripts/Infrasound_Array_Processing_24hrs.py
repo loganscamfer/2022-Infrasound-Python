@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Sep 17 16:47:53 2022
-@author: logan
-"""
 import matplotlib.pyplot as plt
 import obspy
 from obspy.signal.array_analysis import array_processing
@@ -63,10 +58,11 @@ for start_time_morning in start_times:
         Array_1 = array_processing(st,10,0.5,sll_x = -4, slm_x = 4, sll_y = -4, slm_y = 4, 
                  sl_s = 0.1, semb_thres = 0, vel_thres = 0, frqlow= 5,
                  frqhigh=20, stime = start_time_morning, etime = end_time,
-                 prewhiten = False, verbose = True, coordsys = 'lonlat',
+                 prewhiten = False, verbose = False, coordsys = 'lonlat',
                  timestamp = 'mlabday', method = 0, store = None)
     
         filename = start_time_morning.strftime('%Y%m%d_%H%M') +'all_day.pkl'
         pickle.dump(Array_1,open('pickle_files/'+filename,'wb'))
     except:
         pass
+

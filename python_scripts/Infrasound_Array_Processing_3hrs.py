@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Nov 13 17:53:48 2022
 
-@author: logan
-"""
 import matplotlib.pyplot as plt
 import obspy
 from obspy.signal.array_analysis import array_processing
