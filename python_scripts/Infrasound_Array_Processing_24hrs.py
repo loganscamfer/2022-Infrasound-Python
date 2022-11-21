@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Sep 17 16:47:53 2022
-@author: logan
-"""
 import matplotlib.pyplot as plt
 import obspy
 from obspy.signal.array_analysis import array_processing
@@ -77,3 +72,4 @@ for start_time_morning in start_times:
     except:
         failure_date = start_time_morning.strftime('%Y%m%d_%H%M')
         print('Get waveforms failed on ' + failure_date) # error message for get_waveforms
+

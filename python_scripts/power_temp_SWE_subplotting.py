@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 30 18:33:07 2022
-
-@author: logan
-"""
 import matplotlib.pyplot as plt
 import pickle
 import numpy as np
@@ -118,3 +112,4 @@ for data_index, data in enumerate(data_list):
     plt.close()
     date_index = date_index + 1
     index = index + 1
+

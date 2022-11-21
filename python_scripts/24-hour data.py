@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 30 13:21:16 2022
-
-@author: logan
-"""
 import matplotlib.pyplot as plt
 import pickle
 import numpy as np
@@ -101,4 +95,5 @@ date_array = [1,6,8,11,13,15,17,20,21,25,26,35,36,37]
 finalwind_array_list = []
 for d in date_array:
     finalwind_array_list.append(wind_array_list[d])
+
 
