@@ -52,7 +52,7 @@ start_time_morning = UTCDateTime("2020-04-15T06:00:00") # Sets start time to  4/
 start_time_0 = UTCDateTime("2020-04-15T06:00:00")
 start_times = [start_time_0 + i * interval_days * 86400 for i in range(39)]
 
-def Infrasound_Processing(): # Defines Infrasound Processing function
+def Infrasound_Processing(start_time_morning): # Defines Infrasound Processing function
     for start_time_morning in start_times:
         start = time.time()
         try:
