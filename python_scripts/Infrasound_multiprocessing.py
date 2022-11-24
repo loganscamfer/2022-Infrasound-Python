@@ -5,6 +5,8 @@ from obspy.clients.fdsn import Client
 from obspy import UTCDateTime
 import numpy as np
 import pickle
+import multiprocessing as mp
+import os
 import time
 
 client = Client('IRIS')
@@ -50,29 +52,35 @@ start_time_morning = UTCDateTime("2020-04-15T06:00:00") # Sets start time to  4/
 start_time_0 = UTCDateTime("2020-04-15T06:00:00")
 start_times = [start_time_0 + i * interval_days * 86400 for i in range(39)]
 
-for start_time_morning in start_times:
-    start = time.time()
-    try:
-        end_time = start_time_morning + 86400
-        st = client.get_waveforms("XP","PARK","??","HDF",start_time_morning,end_time)
-        add_inv_coords(st, inv)
-        for tr in st: # Removes traces that do not have the full 24 hrs so array_processing is able to run
-            if len(tr.data) != 8640001:
-                st.remove(tr)
+def Infrasound_Processing(): # Defines Infrasound Processing function
+    for start_time_morning in start_times:
+        start = time.time()
         try:
-            Array_1 = array_processing(st,10,0.5,sll_x = -4, slm_x = 4, sll_y = -4, slm_y = 4, 
-             sl_s = 0.1, semb_thres = 0, vel_thres = 0, frqlow= 5,
-             frqhigh=20, stime = start_time_morning, etime = end_time,
-             prewhiten = False, verbose = False, coordsys = 'lonlat',
-             timestamp = 'mlabday', method = 0, store = None)
-    
-            filename = start_time_morning.strftime('%Y%m%d_%H%M') +'all_day.pkl'
-            pickle.dump(Array_1,open('pickle_files/'+filename,'wb'))
+            end_time = start_time_morning + 86400
+            st = client.get_waveforms("XP","PARK","??","HDF",start_time_morning,end_time)
+            add_inv_coords(st, inv)
+            for tr in st: # Removes traces that do not have the full 24 hrs so array_processing is able to run
+                if len(tr.data) != 8640001:
+                    st.remove(tr)
+            try:
+                Array_1 = array_processing(st,10,0.5,sll_x = -4, slm_x = 4, sll_y = -4, slm_y = 4, 
+                 sl_s = 0.1, semb_thres = 0, vel_thres = 0, frqlow= 5,
+                 frqhigh=20, stime = start_time_morning, etime = end_time,
+                 prewhiten = False, verbose = False, coordsys = 'lonlat',
+                 timestamp = 'mlabday', method = 0, store = None)
+        
+                filename = start_time_morning.strftime('%Y%m%d_%H%M') +'all_day.pkl'
+                pickle.dump(Array_1,open('pickle_files/'+filename,'wb'))
+            except:
+                failure_date1 = start_time_morning.strftime('%Y%m%d_%H%M')
+                print('Array Processing failed on ' + failure_date1) # error message for array_processing
         except:
-            failure_date1 = start_time_morning.strftime('%Y%m%d_%H%M')
-            print('Array Processing failed on ' + failure_date1) # error message for array_processing
-    except:
-        failure_date = start_time_morning.strftime('%Y%m%d_%H%M')
-        print('Get waveforms failed on ' + failure_date) # error message for get_waveforms
+            failure_date = start_time_morning.strftime('%Y%m%d_%H%M')
+            print('Get waveforms failed on ' + failure_date) # error message for get_waveforms
     end = time.time()
     print(f'\nTime to complete: {end - start:.2f}')
+#%% Multiprocessing
+num_proc = os.cpu_count() # retrieves num of cores in computer
+print(num_proc)
+pool = mp.Pool()
+pool.map(Infrasound_Processing,start_times)
