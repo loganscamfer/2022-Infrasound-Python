@@ -4,7 +4,15 @@ import numpy as np
 import pandas as pd
 #%% Imports infrasound data
 # 24 hour Data
-dates = ["20200416","20200421","20200423","20200426","20200428","20200430","20200502","20200505","20200506","20200510", "20200511","20200520","20200521","20200522"]
+def datelist(r1, r2):
+    return [item for item in range(r1, r2+1)]
+
+r1, r2 = 20200415, 20200430
+date1 = datelist(r1, r2)
+R1, R2 = 20200501, 20200523
+date2 = datelist(R1,R2)
+dates = date1 + date2
+dates = list(map(str,dates))
 data_list = []
 
 for date in dates:
